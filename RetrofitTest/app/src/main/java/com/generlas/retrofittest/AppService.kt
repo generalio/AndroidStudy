@@ -1,5 +1,6 @@
 package com.generlas.retrofittest
 
+import io.reactivex.rxjava3.core.Observable
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -16,10 +17,10 @@ import retrofit2.http.Query
 interface AppService {
 
     @GET("banner/json")
-    fun getAppData(): Call<banner>
+    fun getAppData(): Observable<banner>
 
     @GET("article/list/{page}/json")
-    fun getPage(@Path("page") page: Int): Call<PassageResponse>
+    fun getPage(@Path("page") page: Int): Observable<PassageResponse>
 
     @GET("get_data.json")
     fun getData(@Query("u") user: String, @Query("t") token: String): Call<Passage>
