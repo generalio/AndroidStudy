@@ -99,7 +99,6 @@ class MainActivity : AppCompatActivity(), TaskRecyclerViewAdapter.OnItemClickLis
     fun addParentTask(title: String) {
         taskInfoList.add(TaskInfo(title, 1, mutableListOf(), false))
         recyclerViewAdapter.submitList(taskInfoList.toList())
-        recyclerview.scrollToPosition(taskInfoList.size - 1)
     }
 
     fun addChildTask(position: Int, content: String) {
@@ -107,7 +106,6 @@ class MainActivity : AppCompatActivity(), TaskRecyclerViewAdapter.OnItemClickLis
             taskInfoList[position].childList.add(ChildInfo(content, 2))
             val newPosition = position + taskInfoList[position].childList.size
             taskInfoList.add(newPosition, TaskInfo(content, 2, mutableListOf(), false))
-            recyclerview.scrollToPosition(newPosition)
             recyclerViewAdapter.submitList(taskInfoList.toList())
         } else {
             taskInfoList[position].childList.add(ChildInfo(content, 2))
@@ -146,7 +144,6 @@ class MainActivity : AppCompatActivity(), TaskRecyclerViewAdapter.OnItemClickLis
             taskInfoList.add(nowPosition + 1, TaskInfo(childInfo.content, childInfo.TYPE, mutableListOf(), false))
             nowPosition++
         }
-        recyclerview.scrollToPosition(nowPosition - 1)
         recyclerViewAdapter.submitList(taskInfoList.toList())
     }
 
@@ -157,7 +154,6 @@ class MainActivity : AppCompatActivity(), TaskRecyclerViewAdapter.OnItemClickLis
             }
 
         }
-        recyclerview.scrollToPosition(position)
         recyclerViewAdapter.submitList(taskInfoList.toList())
     }
 }
