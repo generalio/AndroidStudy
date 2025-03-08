@@ -38,7 +38,9 @@ class MainActivity : AppCompatActivity(), TaskRecyclerViewAdapter.OnItemClickLis
 
         recyclerview.layoutManager = LinearLayoutManager(this)
         recyclerViewAdapter = TaskRecyclerViewAdapter(this)
-        //recyclerview.addItemDecoration(DividerItemDecoration(this, RecyclerView.VERTICAL))
+        //添加边框的线
+        recyclerview.addItemDecoration(DividerItemDecoration(this, RecyclerView.VERTICAL))
+
         recyclerview.adapter = recyclerViewAdapter
         recyclerViewAdapter.submitList(taskInfoList.toList())
 
@@ -49,6 +51,7 @@ class MainActivity : AppCompatActivity(), TaskRecyclerViewAdapter.OnItemClickLis
         }
     }
 
+    //添加侧滑拖拽操作
     fun addHelper() {
         val helper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
             override fun getMovementFlags(
@@ -85,6 +88,7 @@ class MainActivity : AppCompatActivity(), TaskRecyclerViewAdapter.OnItemClickLis
         helper.attachToRecyclerView(recyclerview)
     }
 
+    //展示添加任务的窗口
     fun showAddParentDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_change, null)
         val dialogText: EditText = dialogView.findViewById(R.id.et_change_content)
@@ -96,11 +100,13 @@ class MainActivity : AppCompatActivity(), TaskRecyclerViewAdapter.OnItemClickLis
         dialogBuilder.show()
     }
 
+    //添加一级任务
     fun addParentTask(title: String) {
         taskInfoList.add(TaskInfo(title, 1, mutableListOf(), false))
         recyclerViewAdapter.submitList(taskInfoList.toList())
     }
 
+    //添加二级任务
     fun addChildTask(position: Int, content: String) {
         if(taskInfoList[position].isExpand) {
             taskInfoList[position].childList.add(ChildInfo(content, 2))
@@ -113,6 +119,7 @@ class MainActivity : AppCompatActivity(), TaskRecyclerViewAdapter.OnItemClickLis
         }
     }
 
+    //展开按钮点击后状态的改变
     override fun onExpandClick(position: Int) {
         if(taskInfoList[position].isExpand) {
             taskInfoList[position].isExpand = false
@@ -123,6 +130,7 @@ class MainActivity : AppCompatActivity(), TaskRecyclerViewAdapter.OnItemClickLis
         }
     }
 
+    //点击事件回调
     override fun onItemClick(position: Int) {
         showAddChildDialog(position)
     }
@@ -138,6 +146,7 @@ class MainActivity : AppCompatActivity(), TaskRecyclerViewAdapter.OnItemClickLis
         dialogBuilder.show()
     }
 
+    //展开子任务
     fun expand(position: Int) {
         var nowPosition = position
         for(childInfo in taskInfoList[position].childList) {
@@ -147,6 +156,7 @@ class MainActivity : AppCompatActivity(), TaskRecyclerViewAdapter.OnItemClickLis
         recyclerViewAdapter.submitList(taskInfoList.toList())
     }
 
+    //折叠子任务
     fun folder(position: Int) {
         for(childInfo in taskInfoList[position].childList) {
             if(position + 1 < taskInfoList.size) {

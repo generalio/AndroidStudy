@@ -1,0 +1,32 @@
+package com.generlas.customview
+
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Path
+import android.util.AttributeSet
+import android.view.View
+import kotlin.math.abs
+import kotlin.math.max
+
+/**
+ * description ： TODO:类的作用
+ * date : 2025/3/8 16:00
+ */
+class CustomView @JvmOverloads constructor(context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0) : View(context, attrs, defStyleAttr, defStyleRes) {
+
+    private val mBlackPaint = Paint().apply {
+        color = Color.BLACK
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        canvas.drawRect(0f,0f,100f,200f,mBlackPaint)
+    }
+
+
+}

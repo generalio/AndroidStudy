@@ -33,6 +33,7 @@ class TaskRecyclerViewAdapter(private val itemClickListener: OnItemClickListener
     private val TYPE_PARENT = 1
     private val TYPE_CHILD = 2
 
+    //一级任务的视图绑定及点击事件
     inner class parentViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val parentTitle: TextView = view.findViewById(R.id.parent_title)
         val parentIsExpand: ImageView = view.findViewById(R.id.parent_isExpand)
@@ -46,11 +47,13 @@ class TaskRecyclerViewAdapter(private val itemClickListener: OnItemClickListener
                 itemClickListener.onExpandClick(adapterPosition)
             }
             view.setOnClickListener {
+                //接口回调
                 itemClickListener.onItemClick(adapterPosition)
             }
         }
     }
 
+    //二级视图绑定
     inner class childViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val childTitle: TextView = view.findViewById(R.id.child_title)
     }
@@ -83,6 +86,7 @@ class TaskRecyclerViewAdapter(private val itemClickListener: OnItemClickListener
         }
     }
 
+    //返回不同的TYPE
     override fun getItemViewType(position: Int): Int {
         return getItem(position).TYPE
     }
