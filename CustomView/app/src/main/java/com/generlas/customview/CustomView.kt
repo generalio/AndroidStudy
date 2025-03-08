@@ -23,9 +23,28 @@ class CustomView @JvmOverloads constructor(context: Context,
         color = Color.BLACK
     }
 
+    private var mCircleRadius = 100
+    private var mCircleGravity = 0
+    init {
+        if(attrs != null) {
+            val ty = context.obtainStyledAttributes(attrs, R.styleable.CustomView)
+            mCircleRadius = ty.getDimensionPixelSize(
+                R.styleable.CustomView_customView_circleRadius,
+                mCircleRadius
+            )
+
+            mCircleGravity = ty.getInt(
+                R.styleable.CustomView_customView_circleGravity,
+                mCircleGravity
+            )
+            ty.recycle()
+        }
+    }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.drawRect(0f,0f,100f,200f,mBlackPaint)
+        canvas.drawCircle((width * mCircleGravity / 2).toFloat(), (height * mCircleGravity / 2).toFloat(), mCircleRadius.toFloat(), mBlackPaint)
     }
 
 
