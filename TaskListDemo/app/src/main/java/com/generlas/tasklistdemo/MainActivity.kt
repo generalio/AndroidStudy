@@ -13,6 +13,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG
+import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_IDLE
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Collections
@@ -44,23 +46,13 @@ class MainActivity : AppCompatActivity(), TaskRecyclerViewAdapter.OnItemClickLis
         recyclerview.adapter = recyclerViewAdapter
         recyclerViewAdapter.submitList(taskInfoList.toList())
 
-        addHelper()
-
-        mBtnAddParent.setOnClickListener {
-            showAddParentDialog()
-        }
-    }
-
-    //添加侧滑拖拽操作
-    fun addHelper() {
         val helper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
             override fun getMovementFlags(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder
             ): Int {
                 val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
-                val swipeFlags = ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-                return makeMovementFlags(dragFlags, swipeFlags)
+                return makeFlag(ACTION_STATE_DRAG,dragFlags) or makeFlag(ACTION_STATE_IDLE, dragFlags)
             }
 
             override fun onMove(
@@ -70,22 +62,23 @@ class MainActivity : AppCompatActivity(), TaskRecyclerViewAdapter.OnItemClickLis
             ): Boolean {
                 val from = viewHolder.adapterPosition
                 val to = target.adapterPosition
-                if(!taskInfoList[from].isExpand && !taskInfoList[to].isExpand) {
-                    Collections.swap(taskInfoList, from, to)
-                    recyclerViewAdapter.submitList(taskInfoList.toList())
-                }
+
+                Collections.swap(taskInfoList, from, to)
+                recyclerViewAdapter.submitList(taskInfoList.toList())
+
                 return true
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                folder(position)
-                taskInfoList.removeAt(position)
-                recyclerViewAdapter.submitList(taskInfoList.toList())
+
             }
 
         })
         helper.attachToRecyclerView(recyclerview)
+
+        mBtnAddParent.setOnClickListener {
+            showAddParentDialog()
+        }
     }
 
     //展示添加任务的窗口
@@ -133,6 +126,27 @@ class MainActivity : AppCompatActivity(), TaskRecyclerViewAdapter.OnItemClickLis
     //点击事件回调
     override fun onItemClick(position: Int) {
         showAddChildDialog(position)
+    }
+
+    override fun onDeleteParentClick(position: Int) {
+        folder(position)
+        taskInfoList.removeAt(position)
+        recyclerViewAdapter.submitList(taskInfoList.toList())
+    }
+
+    override fun onDeleteChildClick(position: Int) {
+        var nowPosition = position
+        var childPosition = 0
+
+        while (nowPosition < taskInfoList.size && nowPosition > 0 && taskInfoList[nowPosition].TYPE == 2) {
+            nowPosition--
+            childPosition++
+        }
+
+        taskInfoList.removeAt(position)
+        taskInfoList[nowPosition].childList.removeAt(childPosition - 1)
+
+        recyclerViewAdapter.submitList(taskInfoList.toList())
     }
 
     fun showAddChildDialog(position: Int) {
