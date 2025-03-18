@@ -49,7 +49,7 @@ class ListLinearLayout(context: Context, attrs: AttributeSet?) : LinearLayout(co
         val textLayout = getChildAt(0)
         when(event.action) {
             MotionEvent.ACTION_DOWN -> {
-                initialX = event.x.toInt()
+                initialX = event.x.toInt() - getChildAt(1).translationX.toInt()
             }
 
             MotionEvent.ACTION_MOVE -> {
