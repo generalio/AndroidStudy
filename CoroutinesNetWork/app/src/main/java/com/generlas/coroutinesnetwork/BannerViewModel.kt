@@ -1,5 +1,6 @@
 package com.generlas.coroutinesnetwork
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,9 +20,7 @@ class BannerViewModel: ViewModel() {
     fun getBanner() {
         viewModelScope.launch {
             val res = try {
-                withContext(Dispatchers.IO) {
-                    BannerNetWork.getBanner()
-                }
+                BannerNetWork.getBanner()
             }catch (e: Exception) {
                 null
             }
