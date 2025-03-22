@@ -17,6 +17,12 @@ import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
+
+    /*
+
+    git Study
+    git Test
+    */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
