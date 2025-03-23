@@ -1,6 +1,7 @@
 package com.generlas.broadcaststudy
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.icu.util.Calendar
@@ -19,8 +20,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var calendarView: CalendarView
     lateinit var textView: TextView
     lateinit var timeButton: Button
+    lateinit var dateButton: Button
 
-    @SuppressLint("SetTextI18n", "DefaultLocale")
+    @SuppressLint("SetTextI18n", "DefaultLocale", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,11 +30,33 @@ class MainActivity : AppCompatActivity() {
         calendarView = findViewById(R.id.calendarView)
         textView = findViewById(R.id.textView)
         timeButton = findViewById(R.id.main_button)
+        dateButton = findViewById(R.id.btn_main_dateSelect)
 
         //日期选择
         calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
             val selectDate = "$dayOfMonth/${month + 1}/$year"
             textView.text = selectDate
+        }
+
+        dateButton.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+            // 日期dialog
+            val datePickerDialog = DatePickerDialog(
+                this,
+                {_, selectedYear, selectedMonth, selectedDay ->
+                    val selectedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
+                    textView.text = selectedDate
+                },
+                year,
+                month,
+                day
+            )
+
+            datePickerDialog.show()
         }
 
         //时间选择
