@@ -1,6 +1,7 @@
 plugins {
-    alias(libs.plugins.android.application)
+    //alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.android.library")
     kotlin("kapt")
 }
 
@@ -11,15 +12,15 @@ kapt {
 }
 
 android {
-    namespace = "com.generals.multitest"
-    compileSdk = 34
+    namespace = "com.generals.module_test"
+    compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.generals.multitest"
+        //applicationId = "com.generals.module_test"
         minSdk = 30
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        //versionCode = 1
+        //versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -52,8 +53,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation(project(":lib_common"))
-    implementation(project(":module_test"))
 
     implementation("com.alibaba:arouter-api:1.5.2")
     kapt("com.alibaba:arouter-compiler:1.5.2")

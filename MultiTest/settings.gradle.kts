@@ -21,3 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "MultiTest"
 include(":app")
+include(":lib_common")
+include(":module_test")
