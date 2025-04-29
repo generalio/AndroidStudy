@@ -4,11 +4,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Path
 import android.util.AttributeSet
 import android.view.View
-import kotlin.math.abs
-import kotlin.math.max
 
 /**
  * description ： TODO:类的作用
