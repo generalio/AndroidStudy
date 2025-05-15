@@ -1,15 +1,20 @@
 package com.generlas.customview
 
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.PathMeasure
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Region
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
+import android.view.animation.LinearInterpolator
 
 /**
  * @Desc : 自定义View
@@ -17,6 +22,7 @@ import android.view.View
  * @Date : 2025/4/28 23:13
  */
 
+@SuppressLint("Recycle")
 class BasisView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -24,6 +30,36 @@ class BasisView @JvmOverloads constructor(
     defStyleRes: Int = 0
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
+    val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    val dst = Path()
+    val path = Path()
+    lateinit var pathMeasure: PathMeasure
+    var mCurAnimValue = 0F
+
+    init {
+        setLayerType(LAYER_TYPE_SOFTWARE, null)
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = 40F
+        paint.setColor(Color.BLACK)
+
+        val cx = 500f
+        val cy = 500f
+        val r  = 400f
+        val oval = RectF(cx - r, cy - r, cx + r, cy + r)
+        path.addArc(oval, -90F, -360F)
+        pathMeasure = PathMeasure(path, true)
+        val animator = ValueAnimator.ofFloat(0F,1F)
+        animator.repeatCount = ValueAnimator.INFINITE
+        animator.addUpdateListener { animation ->
+            mCurAnimValue = animation.animatedValue as Float
+            invalidate()
+        }
+        animator.duration = 20000
+        animator.interpolator = LinearInterpolator()
+        animator.start()
+    }
+
+    @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
@@ -49,11 +85,11 @@ class BasisView @JvmOverloads constructor(
 //        paint.setColor(Color.argb(255,255,0,0)) //传入的四个参数分别为A(透明度),R(红),G(绿),B(蓝)
 
 //        路径绘制
-        val paint = Paint().apply {
-            setColor(Color.RED)
-            style = Paint.Style.STROKE
-            strokeWidth = 5F
-        }
+//        val paint = Paint().apply {
+//            setColor(Color.RED)
+//            style = Paint.Style.STROKE
+//            strokeWidth = 5F
+//        }
 
 //        直线路径
 //        val path = Path().apply {
@@ -95,7 +131,10 @@ class BasisView @JvmOverloads constructor(
 //        val region2 = Region(rect2)
 //        region1.op(region2, Region.Op.INTERSECT) //取两个区域的交集
 
-
+        val stop = pathMeasure.length * mCurAnimValue
+        dst.reset()
+        pathMeasure.getSegment(0F,stop,dst,true)
+        canvas.drawPath(dst, paint)
     }
 
 }

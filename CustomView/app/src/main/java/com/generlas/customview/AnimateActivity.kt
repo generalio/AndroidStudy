@@ -47,6 +47,7 @@ class AnimateActivity : AppCompatActivity() {
         setAnimation.addAnimation(alphaAnimation)
         setAnimation.addAnimation(rotateAnimation)
 
+
         btn.setOnClickListener {
 //            val animation = AnimationUtils.loadAnimation(this, R.anim.translateanim) //通过xml的方式构建动画
             /**
